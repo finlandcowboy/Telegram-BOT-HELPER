@@ -1,11 +1,27 @@
 using RestSharp;
 using System;
 using Newtonsoft.Json;
+using Telegram.Bot;
+using Telegram.Bot.Types.ReplyMarkups;
+
 namespace telegram
+
+
 
 {
     public class TelegramApi
     {
+
+
+        
+
+        
+
+        Telegram.Bot.Types.ReplyMarkups.ReplyKeyboardMarkup keyboard = new ReplyKeyboardMarkup(new Telegram.Bot.Types.ReplyMarkups.KeyboardButton("υσι"));
+
+
+
+
         public class Message
         {
             public Chat chat { get; set; }
@@ -32,6 +48,7 @@ namespace telegram
         const String API_KEY = "1088789624:AAH7fPuPwkFIdst-uu07Nl4X2XSYXWFX6D4";
         const String API_URL = "https://api.telegram.org/bot" + API_KEY + "/";
 
+        
 
         RestClient RC = new RestClient();
 
@@ -39,12 +56,13 @@ namespace telegram
 
         public TelegramApi()
         {
+            
 
         }
 
-        public void sendMessage(string text, int chat_id)
+        public void sendMessage(string text, int chat_id, ReplyKeyboardMarkup reply)
         {
-            sendApiRequest("sendMessage", $"chat_id={chat_id}&text={text}");
+            sendApiRequest("sendMessage", $"chat_id={chat_id}&text={text}&reply_markup={reply}");
         }
 
         public Update[] GetUpdates()
@@ -63,6 +81,8 @@ namespace telegram
             }
             else return null;
         }   
+
+
 
         public string sendApiRequest(string ApiMethod, string Params)
         {
