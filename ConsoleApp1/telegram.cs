@@ -1,8 +1,7 @@
 using RestSharp;
 using System;
 using Newtonsoft.Json;
-using Telegram.Bot;
-using Telegram.Bot.Types.ReplyMarkups;
+
 
 namespace telegram
 
@@ -17,8 +16,7 @@ namespace telegram
 
         
 
-        Telegram.Bot.Types.ReplyMarkups.ReplyKeyboardMarkup keyboard = new ReplyKeyboardMarkup(new Telegram.Bot.Types.ReplyMarkups.KeyboardButton("хуй"));
-
+        
 
 
 
@@ -60,9 +58,9 @@ namespace telegram
 
         }
 
-        public void sendMessage(string text, int chat_id, ReplyKeyboardMarkup reply)
+        public void sendMessage(string text, int chat_id)
         {
-            sendApiRequest("sendMessage", $"chat_id={chat_id}&text={text}&reply_markup={reply}");
+            sendApiRequest("sendMessage", $"chat_id={chat_id}&text={text}");
         }
 
         public Update[] GetUpdates()
@@ -73,8 +71,15 @@ namespace telegram
             {
                 foreach (var update in apiResult.result)
                 {
-                  Console.WriteLine($"Получен апдейт {update.update_id}," + $"сообщение от {update.message.chat.first_name}," + $"текст: {update.message.text}");
-                  last_update_id = update.update_id + 1;
+                    try
+                    {
+                        Console.WriteLine($"Получен апдейт {update.update_id}," + $"сообщение от {update.message.chat.first_name}," + $"текст: {update.message.text}");
+                    } catch(Exception ex)
+                    {
+                        Console.WriteLine(ex);
+                        return null;
+                    }
+                    last_update_id = update.update_id + 1;
                 }
 
                 return apiResult.result;

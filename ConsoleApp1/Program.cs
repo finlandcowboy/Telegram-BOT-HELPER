@@ -5,8 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using telegram;
-using Telegram.Bot;
-using Telegram.Bot.Types.ReplyMarkups;
+
 
 namespace ConsoleApp1
 {
@@ -27,9 +26,8 @@ namespace ConsoleApp1
            
 
 
-            var Data = System.IO.File.ReadAllText(@"C:\Users\User\Documents\programming\Telegram-BOT-HELPER\text.json", System.Text.Encoding.UTF8);
+            
             var Quotes_data = System.IO.File.ReadAllText(@"C:\Users\User\Documents\programming\Telegram-BOT-HELPER\quotes.json", System.Text.Encoding.UTF8);
-            Questions = JsonConvert.DeserializeObject<Dictionary<string, string>>(Data);
             Quotes = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(Quotes_data);
             
 
@@ -44,9 +42,8 @@ namespace ConsoleApp1
                 {
                     var Question = update.message.text;
                     var Answer = AnswerQuestion(Question);
-                    Telegram.Bot.Types.ReplyMarkups.ReplyKeyboardMarkup keyboard = new ReplyKeyboardMarkup(new Telegram.Bot.Types.ReplyMarkups.KeyboardButton("хуй"));
-
-                    API.sendMessage(Answer, update.message.chat.id, keyboard);
+                    
+                    API.sendMessage(Answer, update.message.chat.id);
                 }
 
             }
@@ -60,13 +57,7 @@ namespace ConsoleApp1
             UserQuestion = UserQuestion.ToLower();
             List<string> Answers = new List<string>();
 
-            foreach (var Question in Questions)
-            {
-                if (UserQuestion.Contains(Question.Key))
-                {
-                    Answers.Add(Question.Value);
-                }
-            }
+            
 
 
             if (UserQuestion.StartsWith("фраза"))
@@ -81,10 +72,7 @@ namespace ConsoleApp1
 
 
 
-            if (Answers.Count == 0)
-            {
-                Answers.Add("Я тебя не понимаю (");
-            }
+            
 
             if (UserQuestion.Contains("сколько времени"))
             {
@@ -92,46 +80,26 @@ namespace ConsoleApp1
                 Answers.Add($"Точное время: {Time}");
             }
 
-            if (UserQuestion.Contains("новост"))
+            if (UserQuestion.StartsWith("новост"))
             {
-                string _news = "";
                 var NewsApi = new News();
-                var Headline = NewsApi.GetNews(_news);
-                Answers.Add(Headline);
+                var Headlines = NewsApi.getNewsHead("а");
+                Answers.Add(Headlines);
             }
 
-            /*      if (UserQuestion.StartsWith("какая погода в городе"))
-                  {
-                      var words = UserQuestion.Split(' ');
-                      var City = words[words.Length - 1];
+            if (UserQuestion.StartsWith("какая погода в городе"))
+            {
+                var words = UserQuestion.Split(' ');
+                var City = words[words.Length - 1];
 
-                      var WeatherApi = new Weather();
-                      var Forecast = WeatherApi.getWeatherInCity(City);
-                      Answers.Add(Forecast);
-                  }*/
-
-            TelegramBotClient bot = new TelegramBotClient("1088789624:AAH7fPuPwkFIdst-uu07Nl4X2XSYXWFX6D4");
+                var WeatherApi = new Weather();
+                var Forecast = WeatherApi.getWeatherInCity(City);
+                Answers.Add(Forecast);
+            }
 
            
 
-            bot.OnCallbackQuery += async (object sc, Telegram.Bot.Args.CallbackQueryEventArgs ev) =>
-            {
-                var message = ev.CallbackQuery.Message;
-                if (ev.CallbackQuery.Data == "callback1")
-                {
-                    Random rnd = new Random();
-                    int value = rnd.Next() % 5000;
-                    if (Quotes[value].ContainsKey("quoteText") && Quotes[value].ContainsKey("quoteAuthor"))
-                    {
-                        Answers.Add("Однажды один великий человек (" + Quotes[value]["quoteAuthor"] + ") сказал очень умную вещь!\n\n" + Quotes[value]["quoteText"]);
-                    }
-                }
-                else
-                if (ev.CallbackQuery.Data == "callback2")
-                {
-                    Answers.Add("Ну хуй без соли и что????");
-                }
-            };
+            
 
 
 
@@ -140,6 +108,12 @@ namespace ConsoleApp1
                 var Date = DateTime.Now.ToString("dd:MM:yy");
                 Answers.Add($"Точное время: {Date}");
             }
+
+            if (Answers.Count == 0)
+            {
+                Answers.Add("Я тебя не понимаю (");
+            }
+
 
             return String.Join(", ", Answers);     
 
