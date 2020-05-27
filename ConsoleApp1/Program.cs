@@ -26,9 +26,9 @@ namespace ConsoleApp1
 
 
 
-            Playlists = System.IO.File.ReadAllLines(@"C:\Users\User\Documents\programming\Telegram-BOT-HELPER\playlists.txt");
+            Playlists = System.IO.File.ReadAllLines(@"D:\PROGRAMMING\C#\Univer_Project\Telegram-BOT-HELPER\playlists.txt");
             
-            var Quotes_data = System.IO.File.ReadAllText(@"C:\Users\User\Documents\programming\Telegram-BOT-HELPER\quotes.json", System.Text.Encoding.UTF8);
+            var Quotes_data = System.IO.File.ReadAllText(@"D:\PROGRAMMING\C#\Univer_Project\Telegram-BOT-HELPER\quotes.json", System.Text.Encoding.UTF8);
             Quotes = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(Quotes_data);
             
 
