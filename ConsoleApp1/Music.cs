@@ -9,7 +9,7 @@ using Newtonsoft.Json.Converters;
 
 namespace ConsoleApp1
 {
-    class Music
+    class Music 
     {
         public partial class MusicData
         {
