@@ -80,7 +80,7 @@ namespace ConsoleApp1
             var Request = new RestRequest(URL);
             var Response = RC.Get(Request);
             var Data = JsonConvert.DeserializeObject<Example>(Response.Content);
-            Console.WriteLine($"{Data.location.country}");
+            
             return $"В городе {Data.location.country}, {Data.location.name} сейчас {Data.current.weather_descriptions[0]}, где-то {Data.current.temperature} градусов\nСекунда в секунду {Data.location.localtime}";   
         }
     }

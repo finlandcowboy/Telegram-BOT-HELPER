@@ -19,13 +19,14 @@ namespace ConsoleApp1
 
         static Dictionary<string, string> Questions;
         static public List<Dictionary<string, string>> Quotes;
+        static string [] Playlists;
 
         static void Main(string[] args)
         {
 
-           
 
 
+            Playlists = System.IO.File.ReadAllLines(@"C:\Users\User\Documents\programming\Telegram-BOT-HELPER\playlists.txt");
             
             var Quotes_data = System.IO.File.ReadAllText(@"C:\Users\User\Documents\programming\Telegram-BOT-HELPER\quotes.json", System.Text.Encoding.UTF8);
             Quotes = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(Quotes_data);
@@ -58,7 +59,12 @@ namespace ConsoleApp1
             List<string> Answers = new List<string>();
 
             
-
+            if (UserQuestion.Contains("музыка") || UserQuestion.Contains("плейлист"))
+            {
+                Random rnd = new Random();
+                int value = rnd.Next() % 59;
+                Answers.Add(Playlists[value]);
+            }
 
             if (UserQuestion.StartsWith("фраза"))
             {
@@ -71,7 +77,14 @@ namespace ConsoleApp1
             }
 
 
+            if(UserQuestion.Contains("топ чарты"))
+            {
+                string a = "";
+                var MusicApi = new Music();
+                var ChartTop = MusicApi.getHOT(a);
+                Answers.Add(ChartTop);
 
+            }
             
 
             if (UserQuestion.Contains("сколько времени"))
